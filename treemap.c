@@ -36,7 +36,23 @@ TreeNode * createTreeNode(void* key, void * value) {
     return new;
 }
 
-TreeMap * createTreeMap(int (*lower_than) (void* key1, void* key2)) {
+TreeMap * createTreeMap(int (*lT) (void* key1, void* key2)) {
+    TreeMap* map = (TreeMap*) malloc(sizeof(TreeMap));
+    
+    // Verificar si la memoria fue correctamente asignada
+    if (map == NULL) {
+        return NULL;  // Si no se pudo asignar memoria, retornamos NULL
+    }
+
+    // Inicializar la función de comparación
+    map->lower_than = lT;
+
+    // Inicializar root y current a NULL, ya que el árbol está vacío
+    map->root = NULL;
+    map->current = NULL;
+
+    // Retornar el TreeMap inicializado
+    return map;
 
     //new->lower_than = lower_than;
     return NULL;
