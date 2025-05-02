@@ -171,13 +171,43 @@ Pair * searchTreeMap(TreeMap * tree, void* key) {
 
 
 Pair * upperBound(TreeMap * tree, void* key) {
-    return NULL;
+    TreeNode* current = tree->root;
+    TreeNode* successor = NULL;
+
+    while (current != NULL) {
+        if (tree->lower_than(current->pair->key, key)) {
+            current = current->right;
+        } else {
+            successor = current;
+            current = current->left;
+        }
+    }
+
+    return successor ? successor->pair : NULL;
 }
 
 Pair * firstTreeMap(TreeMap * tree) {
-    return NULL;
+    if (tree->root == NULL) return NULL;
+    TreeNode* first = minimum(tree->root);
+    return first ? first->pair : NULL;
 }
 
 Pair * nextTreeMap(TreeMap * tree) {
-    return NULL;
+    if (tree->current == NULL) return NULL;
+    
+    // Si el nodo tiene un subárbol derecho, el siguiente es el más a la izquierda de ese subárbol
+    if (tree->current->right != NULL) {
+        tree->current = minimum(tree->current->right);
+        return tree->current->pair;
+    }
+
+    // Si no tiene subárbol derecho, subimos hasta encontrar un ancestro cuya clave es mayor
+    TreeNode* parent = tree->current->parent;
+    while (parent != NULL && tree->current == parent->right) {
+        tree->current = parent;
+        parent = parent->parent;
+    }
+    tree->current = parent;
+
+    return tree->current ? tree->current->pair : NULL;
 }
