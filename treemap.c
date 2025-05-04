@@ -166,11 +166,12 @@ void removeNode(TreeMap * tree, TreeNode* node) {
     else {
         
         TreeNode* successor = minimum(node->right);
+        free(node->pair);
+        free(node);
 
         // Copiamos los datos del sucesor al nodo a eliminar
         node->pair->key = successor->pair->key;
         node->pair->value = successor->pair->value;
-
        
         removeNode(tree, successor);
     }
