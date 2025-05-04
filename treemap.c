@@ -106,6 +106,7 @@ Pair * searchTreeMap(TreeMap * tree, void* key) {
         int comparison = tree->lower_than(key, current->pair->key);
 
         if (comparison == 0) {
+            tree->current = current;
             return current->pair;
         } else if (comparison == 1) {
             // Si key < current->pair->key, nos movemos al subárbol izquierdo
