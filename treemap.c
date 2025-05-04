@@ -60,38 +60,43 @@ TreeMap * createTreeMap(int (*lT) (void* key1, void* key2)) {
 
 
 void insertTreeMap(TreeMap * tree, void* key, void * value) {
-    TreeNode* newNode = createTreeNode(key, value);
     
-  
-    if (tree->root == NULL) {
-        tree->root = newNode;
-        return;
-    }
-
     TreeNode* current = tree->root;
     TreeNode* parent = NULL;
 
-   
     while (current != NULL) {
         parent = current;
         if (tree->lower_than(key, current->pair->key)) {
             current = current->left;
-        } else {
+        } else if (tree->lower_than(current->pair->key, key)) {
             current = current->right;
+        } else {
+            // Si las claves son iguales, retornamos sin hacer nada (sin insertar duplicados)
+            return;
         }
     }
 
-    
-    if (tree->lower_than(key, parent->pair->key)) {
-        parent->left = newNode;
+    // Crear el nuevo nodo
+    TreeNode* newNode = createTreeNode(key, value);
+    if (newNode == NULL) return;
+
+    if (parent == NULL) {
+        tree->root = newNode;
     } else {
-        parent->right = newNode;
+        // Si la clave es menor que la del nodo actual, insertamos en el subárbol izquierdo
+        if (tree->lower_than(key, parent->pair->key)) {
+            parent->left = newNode;
+        } else {
+            // Si la clave es mayor, insertamos en el subárbol derecho
+            parent->right = newNode;
+        }
+        // Establecer el puntero al padre
+        newNode->parent = parent;
     }
 
-  
-    newNode->parent = parent;
+    // Después de la inserción, hacer que 'current' apunte al nuevo nodo
+    tree->current = newNode;
 }
-
 TreeNode * minimum(TreeNode * x){
     while (x->left != NULL) {
         x = x->left;
