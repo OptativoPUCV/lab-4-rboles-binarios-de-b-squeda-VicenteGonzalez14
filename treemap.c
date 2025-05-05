@@ -100,24 +100,22 @@ void insertTreeMap(TreeMap * tree, void* key, void * value) {
 
 
 Pair * searchTreeMap(TreeMap * tree, void* key) {
-    TreeNode* current = tree->root;
-    while (current != NULL) {
-    
-        int comparison = tree->lower_than(key, current->pair->key);
+    if (tree == NULL || tree->root == NULL) return NULL; 
 
-        if (comparison == 0) {
-            tree->current = current;
-            return current->pair;
-        } else if (comparison == 1) {
-            // Si key < current->pair->key, nos movemos al subárbol izquierdo
-            current = current->left;
+    TreeNode * current = tree->root;
+
+    while (current != NULL) {
+        if (is_equal(tree, key, current->pair->key)) {
+            tree->current = current; 
+            return current->pair;   
+        } else if (tree->lower_than(key, current->pair->key)) {
+            current = current->left; 
         } else {
-            // Si key > current->pair->key, nos movemos al subárbol derecho
-            current = current->right;
+            current = current->right; 
         }
     }
-    tree->current = NULL;
-    return NULL;
+
+    return NULL; 
 }
 
 TreeNode * minimum(TreeNode * x){
